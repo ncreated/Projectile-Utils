@@ -40,13 +40,14 @@ package {
                                     </VBox>
                                     <VBox x="90" y="10">
                                         <Label text="mode:"/>
-                                        <RadioButton label="calculate velocity" groupName="fixMode" event="click:onFixModeChanged" selected="false" />
-                                        <RadioButton label="calculate steps number" groupName="fixMode" event="click:onFixModeChanged" selected="false" />
+                                        <RadioButton label="adjust velocity" groupName="fixMode" event="click:onFixModeChanged" selected="false" />
+                                        <RadioButton label="adjust angle" groupName="fixMode" event="click:onFixModeChanged" selected="false" />
                                     </VBox>
                                     <VBox x="230" y="10" id="timeVBox">
                                         <Label text="steps number:"/>
                                         <NumericStepper id="stepsNS" minimum="10" maximum="200" step="1" value="80" repeatTime="0" event="change:onStepsChanged" />
                                     </VBox>
+
                                     <VBox x="230" y="60" id="velocityVBox">
                                     </VBox>
                                     <PushButton id="launchButton" x="530" y="10" width="100" height="100" label="LAUNCH" event="click:onLaunchClicked"/>
@@ -57,8 +58,8 @@ package {
             else if (_model.stepTime <= 1/30) layout.VBox[0].RadioButton[2].@selected = true;
             else if (_model.stepTime <= 1/20) layout.VBox[0].RadioButton[3].@selected = true;
 
-            if (_model.mode == SimulationModel.MODE_CALCULATE_VELOCITY) layout.VBox[1].RadioButton[0].@selected = true;
-            else if (_model.mode == SimulationModel.MODE_CALCULATE_TIME) layout.VBox[1].RadioButton[1].@selected = true;
+            if (_model.mode == SimulationModel.MODE_ADJUST_VELOCITY) layout.VBox[1].RadioButton[0].@selected = true;
+            else if (_model.mode == SimulationModel.MODE_ADJUST_ANGLE) layout.VBox[1].RadioButton[1].@selected = true;
 
             layout.VBox[2].NumericStepper.@value = _model.steps;
 
@@ -99,11 +100,11 @@ package {
         public function onFixModeChanged(event:Event):void {
             var button:RadioButton = event.currentTarget as RadioButton;
             switch (button.label) {
-                case "calculate velocity":
-                    _model.mode = SimulationModel.MODE_CALCULATE_VELOCITY;
+                case "adjust velocity":
+                    _model.mode = SimulationModel.MODE_ADJUST_VELOCITY;
                     break;
-                case "calculate steps number":
-                    _model.mode = SimulationModel.MODE_CALCULATE_TIME;
+                case "adjust angle":
+                    _model.mode = SimulationModel.MODE_ADJUST_ANGLE;
                     break;
 
             }
@@ -125,18 +126,18 @@ package {
         }
 
         private function modeChanged(new_mode:int):void {
-            if (new_mode == SimulationModel.MODE_CALCULATE_VELOCITY) {
+            if (new_mode == SimulationModel.MODE_ADJUST_VELOCITY) {
                 _timeVBox.enabled = true;
                 _velocityVBox.enabled = false;
             }
-            else if (new_mode == SimulationModel.MODE_CALCULATE_TIME) {
+            else if (new_mode == SimulationModel.MODE_ADJUST_ANGLE) {
                 _timeVBox.enabled = false;
                 _velocityVBox.enabled = true;
             }
         }
 
         private function stepsChanged(new_steps:int):void {
-            if (_model.mode != SimulationModel.MODE_CALCULATE_TIME) {
+            if (_model.mode != SimulationModel.MODE_ADJUST_ANGLE) {
                 _stepsNS.value = new_steps;
             }
         }

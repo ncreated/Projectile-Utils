@@ -22,9 +22,9 @@ package {
         private var _state:int = STATE_AIM;
         private var _stateChanged:Signal;
 
-        public static const MODE_CALCULATE_TIME:int = 0;
-        public static const MODE_CALCULATE_VELOCITY:int = 1;
-        private var _mode:int = MODE_CALCULATE_VELOCITY;
+        public static const MODE_ADJUST_ANGLE:int = 0;
+        public static const MODE_ADJUST_VELOCITY:int = 1;
+        private var _mode:int = MODE_ADJUST_VELOCITY;
         private var _modeChanged:Signal;
 
 
@@ -94,18 +94,28 @@ package {
             _launchVelocity.y = (py / _steps - 0.5 * (gstep * (_steps + 1))) / dt;
         }
 
-        public function calculateStepsNumber():void {
+        public function calculateAngle():void {
             var dt:Number = _stepTime;
-            var px:Number = _targetPosition.x - _body.position.x;
-            var py:Number = _targetPosition.y - _body.position.y;
-            var gstep:Number = _gravity.y * dt * dt;
+            var sx:Number = _targetPosition.x - _body.position.x;
+            var sy:Number = (_targetPosition.y - _body.position.y);
+            var g:Number = _gravity.y;
+            var v:Number = 200;
+
+            var l:Number = v * v * v * v - g * (g * sx * sx + 2 * sy * v * v);
+            var delta:Number = Math.sqrt(l);
+            var angle1:Number = Math.atan((v * v - delta)/(g * sx));
+            var angle2:Number = Math.atan((v * v + delta)/(g * sx));
+
+            _launchVelocity.x = Math.cos(angle2) * v;
+            _launchVelocity.y = Math.sin(angle2) * v;
+            steps = 100;
 
 //            _launchVelocity.x = (px / _steps) / dt;
 //            _launchVelocity.y = (py / _steps - 0.5 * (gstep * (_steps + 1))) / dt;
-            _launchVelocity.x = 10;
-            _launchVelocity.y = -300;
+//            _launchVelocity.x = 10;
+//            _launchVelocity.y = -300;
 
-            steps = (-gstep - 2 * _launchVelocity.y) / gstep;
+//            steps = (-gstep - 2 * _launchVelocity.y) / gstep;
         }
 
         // setters

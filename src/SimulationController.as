@@ -23,11 +23,11 @@ package {
             _view.drawSpace(_model.space);
 
             if (_model.state == SimulationModel.STATE_AIM) {
-                if (_model.mode == SimulationModel.MODE_CALCULATE_VELOCITY) {
+                if (_model.mode == SimulationModel.MODE_ADJUST_VELOCITY) {
                     _model.calculateVelocity();
                 }
-                else if (_model.mode == SimulationModel.MODE_CALCULATE_TIME) {
-                    _model.calculateStepsNumber();
+                else if (_model.mode == SimulationModel.MODE_ADJUST_ANGLE) {
+                    _model.calculateAngle();
                 }
                 _view.drawTrajectory(_model.body.position, _model.launchVelocity, _model.gravity, _model.steps, _model.stepTime);
                 _view.moveMarkerToPosition(_model.targetPosition.x, _model.targetPosition.y);
