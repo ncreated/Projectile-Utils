@@ -6,7 +6,7 @@ package {
     import flash.utils.getTimer;
 
     [SWF(width="640", height="480", frameRate="60", backgroundColor="000000")]
-    public class PhysicTrajectoryPredict extends Sprite {
+    public class PhysicTrajectoryApp extends Sprite {
 
         private var _model:SimulationModel;
         private var _view:SimulationView;
@@ -14,7 +14,7 @@ package {
 
         private var _settings:SettingsPanel;
 
-        public function PhysicTrajectoryPredict() {
+        public function PhysicTrajectoryApp() {
             addEventListener(Event.ADDED_TO_STAGE, init, false, 0, true);
             addEventListener(Event.ENTER_FRAME, update, false, 0, true);
         }

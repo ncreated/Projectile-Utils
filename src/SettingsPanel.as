@@ -3,7 +3,6 @@ package {
     import com.bit101.components.NumericStepper;
     import com.bit101.components.PushButton;
     import com.bit101.components.RadioButton;
-    import com.bit101.components.VBox;
     import com.bit101.utils.MinimalConfigurator;
 
     import flash.display.Sprite;

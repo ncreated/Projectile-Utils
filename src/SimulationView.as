@@ -1,6 +1,4 @@
 package {
-    import flash.display.Bitmap;
-    import flash.display.BitmapData;
     import flash.display.Sprite;
     import flash.events.MouseEvent;
     import flash.geom.Rectangle;

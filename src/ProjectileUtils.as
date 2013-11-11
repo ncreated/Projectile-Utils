@@ -1,7 +1,7 @@
 package {
 
     /**
-     *
+     * Projetile trajectory utils.
      * @author maciek grzybowski, 10.11.13 14:29
      *
      */

@@ -2,7 +2,7 @@
 <module type="Flex" version="4">
   <component name="FlexBuildConfigurationManager" active="PhysicTrajectoryPredict">
     <configurations>
-      <configuration name="PhysicTrajectoryPredict" pure-as="true" main-class="PhysicTrajectoryPredict" output-file="PhysicTrajectoryPredict.swf" output-folder="$MODULE_DIR$/out/production/PhysicTrajectoryPredict" use-html-wrapper="true" wrapper-template-path="$MODULE_DIR$/html-template">
+      <configuration name="PhysicTrajectoryPredict" pure-as="true" main-class="PhysicTrajectoryApp" output-file="PhysicTrajectoryPredict.swf" output-folder="$MODULE_DIR$/out/production/PhysicTrajectoryPredict" use-html-wrapper="true" wrapper-template-path="$MODULE_DIR$/html-template">
         <dependencies target-player="11.1">
           <entries>
             <entry library-id="d2f033a2-80a4-41e6-a401-af68f5ce4eaa">
