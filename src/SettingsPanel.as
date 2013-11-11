@@ -78,7 +78,6 @@ package {
             _alertLabel.visible = _alertLabel.text != "";
 
             _model.stateChanged.add(stateChanged);
-            _model.stepsChanged.add(stepsChanged);
             _model.alertMessageChanged.add(alertMessageChanged);
         }
 
@@ -148,10 +147,6 @@ package {
             }
         }
 
-        private function stepsChanged():void {
-            _stepsNS.value = _model.steps;
-        }
-
         private function alertMessageChanged():void {
             _alertLabel.text = _model.alertMessage;
             _alertLabel.visible = _alertLabel.text != "";
@@ -161,14 +156,6 @@ package {
 
         private function get _launchButton():PushButton {
             return _config.getCompById("launchButton") as PushButton;
-        }
-
-        private function get _stepsNS():NumericStepper {
-            return _config.getCompById("stepsNS") as NumericStepper;
-        }
-
-        private function get _gravityNS():NumericStepper {
-            return _config.getCompById("gravityNS") as NumericStepper;
         }
 
         private function get _alertLabel():Label {
