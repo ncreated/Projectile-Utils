@@ -30,6 +30,7 @@ package {
                     _model.calculateAngle();
                 }
                 _view.drawTrajectory(_model.body.position, _model.launchVelocity, _model.gravity, _model.steps, _model.stepTime);
+                _view.drawVelocity(_model.body.position, _model.launchVelocity);
                 _view.moveMarkerToPosition(_model.targetPosition.x, _model.targetPosition.y);
             }
         }

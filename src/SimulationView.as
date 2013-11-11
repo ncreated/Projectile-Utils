@@ -24,6 +24,7 @@ package {
 
         private var _bitmapDebug:BitmapDebug;
         private var _trajectoryPath:Sprite;
+        private var _velocity:Sprite;
         private var _marker:Sprite;
 
         private var _clicked:Signal;
@@ -35,6 +36,11 @@ package {
             _bitmapDebug.display.x = rect.x;
             _bitmapDebug.display.y = rect.y;
             addChild(_bitmapDebug.display);
+
+            _velocity = new Sprite();
+            _velocity.x = rect.x;
+            _velocity.y = rect.y;
+            addChild(_velocity);
 
             _trajectoryPath = new Sprite();
             _trajectoryPath.x = rect.x;
@@ -70,6 +76,13 @@ package {
                 point = getTrajectoryPoint(begin, gravity, velocity, i, step_time);
                 _trajectoryPath.graphics.lineTo(point.x, point.y);
             }
+        }
+
+        public function drawVelocity(begin:Vec2, velocity:Vec2):void {
+            _velocity.graphics.clear();
+            _velocity.graphics.lineStyle(2, 0x5AD1F2, 0.3);
+            _velocity.graphics.moveTo(begin.x, begin.y);
+            _velocity.graphics.lineTo(begin.x + velocity.x, begin.y + velocity.y);
         }
 
         public function moveMarkerToPosition(x:Number, y:Number):void {

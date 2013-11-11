@@ -106,9 +106,9 @@ package {
             var angle1:Number = Math.atan((v * v - delta)/(g * sx));
             var angle2:Number = Math.atan((v * v + delta)/(g * sx));
 
-            _launchVelocity.x = Math.cos(angle2) * v;
-            _launchVelocity.y = Math.sin(angle2) * v;
-            steps = 100;
+            steps = 200;
+            _launchVelocity.x = Math.cos(angle1) * v;
+            _launchVelocity.y = Math.sin(angle1) * v;
 
 //            _launchVelocity.x = (px / _steps) / dt;
 //            _launchVelocity.y = (py / _steps - 0.5 * (gstep * (_steps + 1))) / dt;
