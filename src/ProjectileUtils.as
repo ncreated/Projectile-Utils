@@ -28,10 +28,10 @@ package {
          * @return angle in radians
          */
         public static function calculateAngle1ToHitCoordinate(x:Number, y:Number, velocity:Number, gravity:Number):Number {
+            if (x == 0) return y > 0 ? -Math.PI * 0.5 : Math.PI * 0.5;
             var delta:Number = calculateDelta(x, y, velocity, gravity);
             var sqrtDelta:Number = Math.sqrt(delta);
-            var angle1:Number = Math.atan((velocity * velocity - sqrtDelta)/(gravity * x));
-            return angle1;
+            return Math.atan((velocity * velocity - sqrtDelta)/(gravity * x));;
         }
 
         /**
@@ -43,10 +43,10 @@ package {
          * @return angle in radians
          */
         public static function calculateAngle2ToHitCoordinate(x:Number, y:Number, velocity:Number, gravity:Number):Number {
+            if (x == 0) return -Math.PI * 0.5;
             var delta:Number = calculateDelta(x, y, velocity, gravity);
             var sqrtDelta:Number = Math.sqrt(delta);
-            var angle2:Number = Math.atan((velocity * velocity + sqrtDelta)/(gravity * x));
-            return angle2;
+            return Math.atan((velocity * velocity + sqrtDelta)/(gravity * x));
         }
 
         private static function calculateDelta(x:Number, y:Number, velocity:Number, gravity:Number):Number {
