@@ -26,13 +26,22 @@ package {
             _view = new SimulationView(simulationRect);
             addChild(_view);
 
+            _controller = new SimulationController(_model, _view);
+
+            // defaults:
+            _model.setTargetPosition(220, 150);
+            _model.steps = 80;
+            _model.stepTime = 1/30;
+            _model.velocity = 300;
+            _model.gravity.setxy(0, 200);
+            _model.trajectory = 0;
+
+            // settings panel:
             var settingsRect:Rectangle = new Rectangle(simulationRect.left, simulationRect.bottom, simulationRect.width, stage.stageHeight - simulationRect.height);
             _settings = new SettingsPanel(settingsRect, _model);
             _settings.x = simulationRect.left;
             _settings.y = simulationRect.bottom;
             addChild(_settings);
-
-            _controller = new SimulationController(_model, _view);
 
             _previousUpdateTime = getTimer();
         }

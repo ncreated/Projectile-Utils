@@ -22,24 +22,31 @@ package {
         private var _state:int = STATE_AIM;
         private var _stateChanged:Signal;
 
-        public static const MODE_ADJUST_ANGLE:int = 0;
-        public static const MODE_ADJUST_VELOCITY:int = 1;
-        private var _mode:int = MODE_ADJUST_VELOCITY;
-        private var _modeChanged:Signal;
-
-
         // view
         private var _physicBounds:Rectangle;
+
+        private var _alertMessage:String;
+        private var _alertMessageChanged:Signal;
 
         // simulation params
         private var _steps:int;
         private var _stepsChanged:Signal;
 
         private var _stepTime:Number;
+        private var _stepTimeChanged:Signal;
+
         private var _targetPosition:Point;
+        private var _targetPositionChanged:Signal;
+
+        private var _velocity:Number;// initial velocity length
+        private var _velocityChanged:Signal;
+
+        private var _gravityChanged:Signal;
+
+        private var _trajectory:int;
+        private var _trajectoryChanged:Signal;
 
         // physic
-        private var _gravity:Vec2;
         private var _space:Space;
         private var _body:Body;
         private var _launchVelocity:Vec2;
@@ -48,19 +55,27 @@ package {
             createPhysic(physic_bounds);
             resetPhysic();
 
-            _stateChanged = new Signal(int);
-            _modeChanged = new Signal(int);
-            _stepsChanged = new Signal(int);
+            _stateChanged = new Signal();
+            _velocityChanged = new Signal();
+            _gravityChanged = new Signal;
+            _stepsChanged = new Signal();
+            _stepTimeChanged = new Signal();
+            _targetPositionChanged = new Signal();
+            _trajectoryChanged = new Signal();
+            _alertMessageChanged = new Signal();
 
-            _steps = 70;
+            _steps = 0;
             _stepTime = 1/30;
-            _targetPosition = new Point(350, 100);
+            _velocity = 0;
+            _trajectory = 0;
+            _alertMessage = "";
+            _launchVelocity = new Vec2();
+            _targetPosition = new Point();
             _physicBounds = physic_bounds;
         }
 
         private function createPhysic(bounds:Rectangle):void {
-            _gravity = new Vec2(0, 200);
-            _space = new Space(_gravity);
+            _space = new Space(new Vec2(0, 200));
 
             _body = new Body(BodyType.DYNAMIC);
             _body.shapes.add(new Polygon(Polygon.box(10, 10)));
@@ -81,41 +96,6 @@ package {
         private function resetPhysic():void {
             _body.position = new Vec2(100, 242);
             _body.velocity = new Vec2(0, 0);
-            _launchVelocity = new Vec2(0, 0);
-        }
-
-        public function calculateVelocity():void {
-            var dt:Number = _stepTime;
-            var px:Number = _targetPosition.x - _body.position.x;
-            var py:Number = _targetPosition.y - _body.position.y;
-            var gstep:Number = _gravity.y * dt * dt;
-
-            _launchVelocity.x = (px / _steps) / dt;
-            _launchVelocity.y = (py / _steps - 0.5 * (gstep * (_steps + 1))) / dt;
-        }
-
-        public function calculateAngle():void {
-            var dt:Number = _stepTime;
-            var sx:Number = _targetPosition.x - _body.position.x;
-            var sy:Number = (_targetPosition.y - _body.position.y);
-            var g:Number = _gravity.y;
-            var v:Number = 200;
-
-            var l:Number = v * v * v * v - g * (g * sx * sx + 2 * sy * v * v);
-            var delta:Number = Math.sqrt(l);
-            var angle1:Number = Math.atan((v * v - delta)/(g * sx));
-            var angle2:Number = Math.atan((v * v + delta)/(g * sx));
-
-            steps = 200;
-            _launchVelocity.x = Math.cos(angle1) * v;
-            _launchVelocity.y = Math.sin(angle1) * v;
-
-//            _launchVelocity.x = (px / _steps) / dt;
-//            _launchVelocity.y = (py / _steps - 0.5 * (gstep * (_steps + 1))) / dt;
-//            _launchVelocity.x = 10;
-//            _launchVelocity.y = -300;
-
-//            steps = (-gstep - 2 * _launchVelocity.y) / gstep;
         }
 
         // setters
@@ -125,39 +105,52 @@ package {
                 resetPhysic();
             }
             else if (_state == STATE_AIM && value == STATE_LAUNCHED) {
-                _body.velocity = _launchVelocity;
+                _body.velocity.set(_launchVelocity);
             }
 
             _state = value;
-            _stateChanged.dispatch(value);
-        }
-
-        public function set mode(value:int):void {
-            _mode = value;
-            _modeChanged.dispatch(value);
+            _stateChanged.dispatch();
         }
 
         public function set steps(value:int):void {
             _steps = value;
-            _stepsChanged.dispatch(value);
+            _stepsChanged.dispatch();
         }
 
         public function set stepTime(value:Number):void {
             _stepTime = value;
+            _stepTimeChanged.dispatch();
+        }
+
+        public function setTargetPosition(x:Number, y:Number):void {
+            _targetPosition.setTo(x, y);
+            _targetPositionChanged.dispatch();
+        }
+
+        public function set velocity(value:Number):void {
+            _velocity = value;
+            _velocityChanged.dispatch();
+        }
+
+        public function setGravity(y:Number):void {
+            _space.gravity.y = y;
+            _gravityChanged.dispatch();
+        }
+
+        public function set trajectory(value:int):void {
+            _trajectory = value;
+            _trajectoryChanged.dispatch();
+        }
+
+        public function set alertMessage(value:String):void {
+            _alertMessage = value;
+            _alertMessageChanged.dispatch();
         }
 
         // getters
 
         public function get state():int {
             return _state;
-        }
-
-        public function get mode():int {
-            return _mode;
-        }
-
-        public function get gravity():Vec2 {
-            return _gravity;
         }
 
         public function get space():Space {
@@ -188,16 +181,52 @@ package {
             return _stateChanged;
         }
 
-        public function get modeChanged():Signal {
-            return _modeChanged;
-        }
-
         public function get physicBounds():Rectangle {
             return _physicBounds;
         }
 
         public function get stepsChanged():Signal {
             return _stepsChanged;
+        }
+
+        public function get stepTimeChanged():Signal {
+            return _stepTimeChanged;
+        }
+
+        public function get targetPositionChanged():Signal {
+            return _targetPositionChanged;
+        }
+
+        public function get velocity():Number {
+            return _velocity;
+        }
+
+        public function get velocityChanged():Signal {
+            return _velocityChanged;
+        }
+
+        public function get trajectory():int {
+            return _trajectory;
+        }
+
+        public function get trajectoryChanged():Signal {
+            return _trajectoryChanged;
+        }
+
+        public function get alertMessage():String {
+            return _alertMessage;
+        }
+
+        public function get alertMessageChanged():Signal {
+            return _alertMessageChanged;
+        }
+
+        public function get gravity():Vec2 {
+            return _space.gravity;
+        }
+
+        public function get gravityChanged():Signal {
+            return _gravityChanged;
         }
     }
 }

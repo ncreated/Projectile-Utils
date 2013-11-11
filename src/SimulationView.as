@@ -66,9 +66,12 @@ package {
             _bitmapDebug.flush();
         }
 
-        public function drawTrajectory(begin:Vec2, velocity:Vec2, gravity:Vec2, steps:int, step_time:Number):void {
+        public function clearTrajectories():void {
             _trajectoryPath.graphics.clear();
-            _trajectoryPath.graphics.lineStyle(2, 0xEFEF39, 0.3);
+        }
+
+        public function drawTrajectory(begin:Vec2, velocity:Vec2, gravity:Vec2, steps:int, step_time:Number, color:uint):void {
+            _trajectoryPath.graphics.lineStyle(2, color, 0.5);
             _trajectoryPath.graphics.moveTo(begin.x, begin.y);
 
             var point:Vec2;
