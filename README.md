@@ -1,4 +1,4 @@
-<h1>Projectile-Utils<h1>
+<h1>Projectile-Utils</h1>
 
 This example project illustrates my solution for projectile trajectory calculation. The problem which it solves is:
 
